@@ -1,34 +1,36 @@
 import React, { useContext } from "react";
 import SigninPage from "../modules/SigninPage";
 import {
-  Route,
-  RouterProvider,
-  createBrowserRouter,
-  createRoutesFromElements,
+    Route,
+    RouterProvider,
+    createBrowserRouter,
+    createRoutesFromElements,
 } from "react-router-dom";
 import AuthContext from "../config/context/auth.context";
+import AdminLayout from "../layout/AdminLayout";
+import UserLayout from "../layout/UserLayout";
+import ClientLayout from "../layout/ClientLayout";
 
 export const AppRouter = () => {
-  const { user } = useContext(AuthContext);
-  const router = createBrowserRouter(
-    createRoutesFromElements(
-      <>
-        {user?.signed ? (
-          <>
-            <Route path="/" element={<>Dashboard</>}>
-              <Route path="dashboard" element={<>Dashboard</>} />
-              <Route path="users" element={<>Dashboard</>} />
-              <Route path="products" element={<>Dashboard</>} />
-            </Route>
-          </>
-        ) : (
-          <Route path="/" element={<SigninPage/>} />
-        )}
-        <Route path="*" element={<>404</>} />
-      </>
-    )
-  );
-  return <RouterProvider router={router} />;
+    const { user } = useContext(AuthContext); //context = payload -> /api/auth
+    //toda la aplicacion sabe que datos de mi usuario tengo disponible
+    const router = createBrowserRouter(
+        createRoutesFromElements(
+            <>
+                {user?.signed ? (
+                    <>
+                        <Route path="/" element={<AdminLayout/>} />
+                        <Route path="/usuario" element={<UserLayout />} />
+                        <Route path="/cliente" element={<ClientLayout />} />
+                    </>
+                ) : (
+                    <Route path="/" element={<SigninPage />} />
+                )}
+                <Route path="*" element={<>404</>} />
+            </>
+        )
+    );
+    return <RouterProvider router={router} />;
 };
 
 export default AppRouter;
